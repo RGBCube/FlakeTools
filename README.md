@@ -19,18 +19,18 @@ Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
 ```nix
 {
   description = "Blazingly fast tool written in Rust.";
->
+
   inputs = {
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
     };
->
+
     flakeTools = {
       url = "github:RGBCube/FlakeTools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
->
+
   outputs = { self, nixpkgs, flakeTools, ... }: flakeTools.eachArch (system: {
     packages.${system}.default = <deviration>;
   })
