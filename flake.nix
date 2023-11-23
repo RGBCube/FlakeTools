@@ -19,7 +19,7 @@
     #
     # `{ squares = { "1" = 1; "2" = 4; "3" = 9; }; }`
     recursiveUpdateMap = function: list:
-      builtins.foldl' nixpkgs.lib.recursiveUpdate {} builtins.concatMap function list;
+      builtins.foldl' nixpkgs.lib.recursiveUpdate {} builtins.map function list;
 
     # List of all architectures nixpkgs supports.
     allArches = import ./allSystems.nix;
