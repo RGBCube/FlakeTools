@@ -12,30 +12,33 @@ Calls the given function with the most commonly used architectures
 (currently these are aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux).
 Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
 
-NOTE: It does NOT insert the arch into the attribute set, so you have to manually use it like so:
+> [!WARNING]
+> It does NOT insert the arch into the attribute set,
+> so you have to manually use it like so:
+>
+> ```nix
+> {
+>   description = "Blazingly fast tool written in Rust.";
+>
+>   inputs = {
+>     nixpkgs = {
+>       url = "github:NixOS/nixpkgs/nixos-unstable";
+>     };
+>
+>     flakeTools = {
+>       url = "github:RGBCube/FlakeTools";
+>       inputs.nixpkgs.follows = "nixpkgs";
+>     };
+>   };
+>
+>   outputs = { self, nixpkgs, flakeTools, ... }: flakeTools.eachArch (system: {
+>     packages.${system}.default = <deviration>;
+>   })
+> }
+> ```
 
-```nix
-{
-  description = "Blazingly fast tool written in Rust.";
-
-  inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-unstable";
-    };
-
-    flakeTools = {
-      url = "github:RGBCube/FlakeTools";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
-
-  outputs = { self, nixpkgs, flakeTools, ... }: flakeTools.eachArch (system: {
-    packages.${system}.default = <deviration>;
-  })
-}
-```
-
-This also applies to `eachArch`.
+> [!NOTE]
+> This also applies to `eachArch`.
 
 ### `eachArch :: (string -> attrset) -> attrset`
 
@@ -44,8 +47,9 @@ Equivalent to `recursiveUpdateMap <function-passed-in> allArches`.
 Calls the given function with **all** architectures nixpkgs supports.
 Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
 
-WARNING: You probably want to use `eachDefaultArch` instead,
-since this will take a while when running `nix flake check`.
+> [!WARNING]
+> You probably want to use `eachDefaultArch` instead,
+> since this will take a while when running `nix flake check`.
 
 ### `allArches :: [ string ]`
 
