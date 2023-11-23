@@ -22,11 +22,15 @@
       builtins.foldl' nixpkgs.lib.recursiveUpdate {} (builtins.map function list);
 
     # List of all architectures nixpkgs supports.
-    allArches = import ./allSystems.nix;
+    allArches = import ./allArches.nix;
 
     # List of the most commonly used architectures.
     # Currently these are aarch64-darwin, aarch64-linux, x86_64-darwin and x86_64-linux.
-    defaultArches = import ./defaultSystems.nix;
+    defaultArches = import ./defaultArches.nix;
+
+    # Lis of the most commonly used Linux architectures.
+    # Currently these are aarch64-linux and x86_64-linux.
+    defaultLinuxArches = import ./defaultLinuxArches.nix;
 
     # Equivalent to `recursiveUpdateMap <function-passed-in> allArches`.
     #
@@ -43,5 +47,12 @@
     # (currently these are aarch64-darwin, aarch64-linux, x86_64-darwin and x86_64-linux).
     # Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
     eachDefaultArch = function: self.recursiveUpdateMap function self.defaultArches;
+
+    # Equivalent to `recursiveUpdateMap <function-passed-in> defaultLinuxArches`.
+    #
+    # Calls the given function with the most commonly used linux architectures
+    # (currently these are aarch64-darwin, aarch64-linux, x86_64-darwin and x86_64-linux).
+    # Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
+    eachDefaultLinuxArch = function: self.recursiveUpdateMap function self.defaultLinuxArches;
   };
 }

@@ -5,6 +5,7 @@ A simpler and less bug-prone flake-utils alternative.
 ## API
 
 ### `eachDefaultArch :: (string -> attrset) -> attrset`
+### `eachDefaultLinuxArch :: (string -> attrset) -> attrset` (only Linux architectures)
 
 Equivalent to `recursiveUpdateMap <function-passed-in> defaultArches`.
 
