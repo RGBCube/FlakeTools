@@ -9,33 +9,33 @@ A simpler and less bug-prone flake-utils alternative.
 Equivalent to `recursiveUpdateMap <function-passed-in> defaultArches`.
 
 Calls the given function with the most commonly used architectures
-(currently these are aarch64-darwin, aarch64-linux, x86_64-darwin, x86_64-linux).
+(currently these are `aarch64-darwin`, `aarch64-linux`, `x86_64-darwin` and `x86_64-linux`).
 Then it merges them together using nixpkgs' `lib.recursiveUpdate`.
 
 > [!WARNING]
-> It does NOT insert the arch into the attribute set,
-> so you have to manually use it like so:
+> `eachDefaultArch` does NOT insert the arch into the attribute set
+> unlike flake-utils, so you have to manually use it like so:
+
+```nix
+{
+  description = "Blazingly fast tool written in Rust.";
 >
-> ```nix
-> {
->   description = "Blazingly fast tool written in Rust.";
+  inputs = {
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+    };
 >
->   inputs = {
->     nixpkgs = {
->       url = "github:NixOS/nixpkgs/nixos-unstable";
->     };
+    flakeTools = {
+      url = "github:RGBCube/FlakeTools";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
 >
->     flakeTools = {
->       url = "github:RGBCube/FlakeTools";
->       inputs.nixpkgs.follows = "nixpkgs";
->     };
->   };
->
->   outputs = { self, nixpkgs, flakeTools, ... }: flakeTools.eachArch (system: {
->     packages.${system}.default = <deviration>;
->   })
-> }
-> ```
+  outputs = { self, nixpkgs, flakeTools, ... }: flakeTools.eachArch (system: {
+    packages.${system}.default = <deviration>;
+  })
+}
+```
 
 > [!NOTE]
 > This also applies to `eachArch`.
@@ -58,9 +58,9 @@ List of all architectures nixpkgs supports.
 ### `defaultArches :: [ string ]`
 
 List of the most commonly used architectures.
-Currently these are aarch64-darwin, aarch64-linux, x86_64-darwin and x86_64-linux.
+Currently these are `aarch64-darwin`, `aarch64-linux`, `x86_64-darwin` and `x86_64-linux`.
 
-### `recursiveUpdateMap :: function -> list -> attrset`
+### `recursiveUpdateMap :: (string -> attrset) -> list -> attrset`
 
 Makes a single set from a provided `function` and a `list`
 by mapping and then recursively updating each item together.
