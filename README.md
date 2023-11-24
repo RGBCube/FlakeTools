@@ -2,6 +2,8 @@
 
 A simpler and less bug-prone flake-utils alternative.
 
+Currently has only the basics, but I will expand the functionality soon.
+
 ## API
 
 ### `eachDefaultArch :: (string -> attrset) -> attrset`
